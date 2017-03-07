@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='AEHOME'>
+	<inherits name="com.google.gwt.user.User" />
+	<inherits name='com.extjs.gxt.themes.Themes' />
+	<inherits name="gwtupload.GWTUpload"/>
+	<inherits name="com.google.gwt.validation.Validation" />
+	<inherits name="com.reveregroup.gwt.imagepreloader.ImagePreloader" />
+	<entry-point class='org.ae.client.AEHOME' />
+	<source path='client' />
+	<source path='shared' />
+	<stylesheet src="../../AEHOME.css" />
+	<stylesheet src="../../ExtGWT/themes/slate/css/xtheme-slate.css" />
+	<stylesheet src="../../ExtGWT/css/gxt-gray.css" />
+	<stylesheet src="../ExtGWT/css/gxt-all.css" />
+	<stylesheet src="Upload.css"/>
+	<inherits name="com.extjs.gxt.ui.GXT"/>
+	<inherits name="com.google.web.bindery.requestfactory.RequestFactory"/>
+	<inherits name="com.google.gwt.editor.Editor"/>
+</module>

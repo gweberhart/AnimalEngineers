@@ -1,0 +1,12 @@
+<!-- Indices written at Wed, 20 Aug 2014 10:26:30 MDT -->
+
+<datastore-indexes>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="AnimalModel" ancestor="false" source="auto">
+        <property name="deleted" direction="asc"/>
+        <property name="rescueURL" direction="asc"/>
+        <property name="dateLastChanged" direction="desc"/>
+    </datastore-index>
+
+</datastore-indexes>

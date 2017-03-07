@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<g:HTMLPanel>
+		<table cellspacing="5">
+			<tr>
+				<td>
+					<a href="http://www.greyhoundlove.com/" target="_blank">
+						<img src="images/ae/Greyhounds/GreyhoundLove.jpg" />
+					</a>
+				</td>
+			</tr>
+
+			<tr>
+				<td>
+					<a href="http://www.gpalv.com/" target="_blank">
+						<img src="images/ae/Greyhounds/GreyhoundPetsofAmerica.jpg" />
+					</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<a href="http://duds4buds.com/" target="_blank">
+						<img src="images/ae/Greyhounds/Duds4Buds.jpg" />
+					</a>
+				</td>
+			</tr>
+		</table>
+	</g:HTMLPanel>
+</ui:UiBinder> 

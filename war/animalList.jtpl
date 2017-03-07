@@ -1,0 +1,16 @@
+<span class="x-editable"></span>
+<div class="thumb-wrap" id="{name}" style="border: 1px solid white">
+<div class="thumb">
+<table>
+	<tr>
+		<td rowspan="2" ><img src="{path}"></td>
+		<td>&nbsp;</td>
+		<td><b>{name}</b><br>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>{desc}</td>
+</table>
+</div>
+</div>
+<span class="x-editable"></span>

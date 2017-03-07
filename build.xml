@@ -1,0 +1,35 @@
+<project>
+	<path id="classpath">
+		<fileset dir="war/WEB-INF/lib" includes="**/*.jar" />
+		<pathelement location="war/WEB-INF/classes" />
+		<pathelement location="test-classes" />
+	</path>
+	<target name="KSLScript">
+		<junit haltonfailure="true" haltonerror="true">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<test name="test.ae.client.KSLScript" />
+		</junit>
+	</target>
+	<target name="KSLREScript">
+		<junit haltonfailure="true" haltonerror="true">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<test name="test.ae.client.KSLKeyboard" />
+		</junit>
+	</target>
+	<target name="KSLSellStuff">
+		<junit haltonfailure="true" haltonerror="true">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<test name="test.ae.client.KSLSellStuff" />
+		</junit>
+	</target>
+	<target name="KeepAEAliveScript">
+		<junit haltonfailure="true" haltonerror="true">
+			<classpath refid="classpath" />
+			<formatter type="brief" usefile="false" />
+			<test name="test.ae.client.KeepAEAliveScript" />
+		</junit>
+	</target>
+</project>

@@ -1,0 +1,18 @@
+package com.example.tests;
+
+import com.thoughtworks.selenium.*;
+import java.util.regex.Pattern;
+
+public class Temp extends SeleneseTestCase {
+	public void setUp() throws Exception {
+		setUp("http://change-this-to-the-site-you-are-testing/", "*chrome");
+	}
+	public void testTemp() throws Exception {
+		for (int second = 0;; second++) {
+			if (second >= 60) fail("timeout");
+			try { if ("".equals(selenium.getTable("//div[@id='Meow - Test Animal Title']/div/table.1.0"))) break; } catch (Exception e) {}
+			Thread.sleep(1000);
+		}
+
+	}
+}

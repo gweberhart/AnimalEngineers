@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blacklistentries>
+  <blacklist>
+    <subnet>88.229.15.139</subnet>
+    <description>Deleted all of my images!</description>
+  </blacklist>
+</blacklistentries>

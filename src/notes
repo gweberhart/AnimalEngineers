@@ -1,0 +1,26 @@
+How to backup and restore app engine data
+http://code.google.com/appengine/docs/python/tools/uploadingdata.html
+http://www.python.org/download/releases/2.5.4/
+
+Live
+appcfg.py download_data --application=animalengineers --url=http://1.latest.animalengineers.appspot.com/remote_api --filename=c:\backup.txt
+appcfg.py upload_data --application=animalengineers --url=http://1.latest.animalengineers.appspot.com/remote_api --filename=c:\backup.txt
+
+Developer 
+appcfg.py download_data --application=animalengineers --url=http://127.0.0.1:8888/remote_api --kind=AnimalModel --filename=c:\refresh.txt
+appcfg.py upload_data --application=animalengineers --url=http://127.0.0.1:8888/remote_api --kind=AnimalModel --filename=c:\refresh.txt
+
+
+Selenium Testing
+Selenium server command line arg. -singlewindow
+install these plugins
+http://getfirebug.com/
+http://gwt.google.com/missing-plugin/MissingPlugin.html
+
+No get...
+
+
+http://hg.assembla.com/animalengineer
+
+Meow... After tag
+

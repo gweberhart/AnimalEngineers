@@ -1,0 +1,32 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:org.ae.client.view.config">
+	<ui:style>
+		.important {
+			font-size: x-large;
+			padding: 10px
+		}
+	</ui:style>
+	<g:HTMLPanel>
+		<table width="100%">
+			<tr>
+				<td>
+					<g:Label styleName='{style.important}' text="up to 9 other Campaign Images"/>
+				</td>
+				<td>
+					<table valign="top" align="right">
+						<tr>
+							<td>
+								<g:Button ui:field="btnAddImage">Add Image</g:Button>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<g:FlowPanel ui:field="flowPanel">
+			<p1:ImageWidget />
+			<p1:ImageWidget />
+		</g:FlowPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

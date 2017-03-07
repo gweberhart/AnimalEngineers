@@ -1,0 +1,2 @@
+serviceClass: org.ae.client.frame.AEServices
+path: C5B31FC7CC9CEC23A9DFF7ABF6A6B57C.gwt.rpc

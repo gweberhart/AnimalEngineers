@@ -1,0 +1,505 @@
+/**
+ * Copyright (c) 2010 Animal Engineers, All Rights Reserved
+ */
+package test.ae.client;
+
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
+
+import junit.framework.TestCase;
+
+import org.ae.server.domain.Campaign;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.webdriven.WebDriverBackedSelenium;
+
+public class KSLScript extends TestCase {
+  private boolean actuallyPost = true;
+  private boolean interactive = true;
+  public static final int HOURS_BETWEEN_POST_SAME_AD = 2;
+  public static final String pageTimeOutMS = "60000";
+  public static final String slowSpeed = "2000";
+  public static final String fastSpeed = "1000";
+  Campaign campaign;
+  private int imageNumber;
+  ArrayList<Campaign> campaigns;
+  private Map<String, AdOnPage> adNumbersOnPage;
+  private boolean adNumbersDirty;
+  PostTimes postTimes = new PostTimes();
+  Selenium selenium;
+  WebDriver driver;
+  private String baseUrl;
+  private static ChromeDriverService service;
+
+  @Before
+  public void setUp() throws Exception {
+    if (interactive) {
+      service = new ChromeDriverService.Builder()
+          .usingDriverExecutable(new File("chromedriver.exe"))
+          .usingAnyFreePort().build();
+      service.start();
+      driver = new RemoteWebDriver(service.getUrl(),
+          DesiredCapabilities.chrome());
+    } else {
+      driver = new PhantomJSDriver(makeCapabilites());
+    }
+    baseUrl = "http://www.ksl.com/";
+    driver.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+    selenium = new WebDriverBackedSelenium(driver, baseUrl);
+  }
+
+  private DesiredCapabilities makeCapabilites() {
+    DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+    desiredCapabilities.setJavascriptEnabled(true);
+    desiredCapabilities.setCapability("takesScreenshot", false);
+    desiredCapabilities.setCapability(
+        PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,
+        "phantomjs.exe");
+    return desiredCapabilities;
+  }
+
+  @After
+  public void tearDown() throws Exception {
+    System.out.println("tearDown()");
+    driver.quit();
+    if (service != null) {
+      service.stop();
+    }
+  }
+
+  public void testAddAndRemoveAds() throws Exception {
+    if (postTimes.hasEnoughTimePassedSinceLastPosting()) {
+      campaigns = ServicesClient.fetchCampaigns();
+      cleanUp();
+      for (Campaign campaign : campaigns) {
+        this.campaign = campaign;
+        if (isTimeToPostThisAd("Caws")) {
+          postAd();
+        } else if (isTimeToDelete()) {
+          deleteAd(campaign.getPubliserAdNumber());
+        }
+      }
+    }
+  }
+
+  boolean isTimeToPostThisAd(String rescueID) throws IOException,
+      ParseException {
+    if (!campaign.getRescueURL().equals(rescueID)) {
+      return false;
+    }
+    writeTimeToPostStatus();
+    if (!postTimes.hasEnoughTimePassedSinceLastPostingInCategory(campaign)) {
+      return false;
+    }
+    if (!hasEnoughTimePassedSinceLastPostingThisAd()) {
+      return false;
+    }
+    if (campaign.getActive() && !campaign.getDeleted()) {
+      return true;
+    }
+    return false;
+  }
+
+  private void writeTimeToPostStatus() {
+    System.out.println("isTimeToPost:adNumber: "
+        + campaign.getPubliserAdNumber() + " LastPostTime: "
+        + campaign.getLastPostTime() + " Cat: " + campaign.getSubCategory()
+        + " Title: " + campaign.getAdTitle());
+  }
+
+  private boolean hasEnoughTimePassedSinceLastPostingThisAd() {
+    if (campaign.getLastPostTime() == null) {
+      return true;
+    }
+    Date nextPostTime = DateUtils.addHours(campaign.getLastPostTime(),
+        HOURS_BETWEEN_POST_SAME_AD);
+    if (!nextPostTime.before(new Date())) {
+      return false;
+    }
+    return true;
+  }
+
+  void postAd() throws InterruptedException, Exception {
+    maybeLogin();
+    loadAdNumbersOnPage();
+    if (adNumbersOnPage.size() > 5) {
+      deleteAnyAll();
+      fail("Only five ads allowed at a time. Delete and/or deactive some ads. ");
+    }
+    fixAdNumber();
+    deleteAd(campaign.getPubliserAdNumber());
+    basicInfoPage();
+    contactPage();
+    addPhotos();
+    if (!actuallyPost) {
+      fail("ActuallyPost set to false");
+    }
+    finishPosting();
+    Thread.sleep(2000);
+    persistAdNumber();
+  }
+
+  void fixAdNumber() throws InterruptedException {
+    if (StringUtils.isEmpty(campaign.getPubliserAdNumber())) {
+      if (!isAdOnPage()) {
+        String addNumber = findKslAdNumber(campaign);
+        campaign.setPubliserAdNumber(addNumber);
+        ServicesClient.updatePublisherAdNumber(campaign);
+      }
+    }
+  }
+
+  void persistAdNumber() throws InterruptedException {
+    campaign.setPubliserAdNumber(null);
+    loadAdNumbersOnPage();
+    String adNumber = null;
+    for (int i = 1; i < 10; i++) {
+      adNumber = findKslAdNumber(campaign);
+      if (StringUtils.isEmpty(adNumber)) {
+        Thread.sleep(1000);
+        selenium.refresh();
+        adNumbersDirty = true;
+        loadAdNumbersOnPage();
+      } else {
+        break;
+      }
+    }
+    if (isAdOnPage()) {
+      ServicesClient.updatePublisherAdNumber(campaign);
+      fail("Unable to update ad number for newly created ad");
+    } else {
+      campaign.setPubliserAdNumber(adNumber);
+    }
+    ServicesClient.updatePublisherAdNumber(campaign);
+  }
+
+  boolean isTimeToDelete() throws InterruptedException {
+    if (!campaign.getActive()) {
+      if (!StringUtils.isEmpty(campaign.getPubliserAdNumber())) {
+        maybeLogin();
+        loadAdNumbersOnPage();
+        if (isAdOnPage()) {
+          return true;
+        } else {
+          campaign.setPubliserAdNumber(null);
+          ServicesClient.updatePublisherAdNumber(campaign);
+        }
+      }
+    }
+    return false;
+  }
+
+  boolean isAdOnPage() {
+    return adNumbersOnPage.containsKey(campaign.getPubliserAdNumber());
+  }
+
+  public void maybeLogin() throws InterruptedException {
+    if (!selenium.isTextPresent("Hello Animal Volunteer")) {
+      goSlow();
+      selenium
+          .open("https://www.ksl.com/public/member/signin?login_forward=%2F");
+      selenium.waitForPageToLoad(pageTimeOutMS);
+      waitFor("Sign In Here");
+      selenium.type("memberemail", "gary@animalengineers.org");
+      selenium.type("memberpassword", "badcat");
+      selenium.click("//*[@id='dado_form_3']/div/div[2]/ol/li[3]/input");
+      waitFor("Hello Animal Volunteer"); // not currently logged in
+    }
+  }
+
+  void goSlow() {
+    selenium.setSpeed(slowSpeed);
+  }
+
+  void goFast() {
+    selenium.setSpeed(fastSpeed);
+  }
+
+  String findKslAdNumber(Campaign aCampaign) throws InterruptedException {
+    for (String adNumber : adNumbersOnPage.keySet()) {
+      if (getAllStoredAdNumbers().get(adNumber) == null) {
+        AdOnPage adOnPage = adNumbersOnPage.get(adNumber);
+        String adTitleCampaign = StringUtils
+            .remove(aCampaign.getAdTitle(), " ");
+        String adTitlePage = StringUtils.remove(adOnPage.getAdTitle(), " ");
+        if (adTitleCampaign.equals(adTitlePage)) {
+          return adNumber;
+        }
+      }
+    }
+    return null;
+  }
+
+  HashMap<String, Campaign> getAllStoredAdNumbers() {
+    HashMap<String, Campaign> m = new HashMap<String, Campaign>();
+    for (Campaign campaign : campaigns) {
+      m.put(campaign.getPubliserAdNumber(), campaign);
+    }
+    return m;
+  }
+
+  void loadAdNumbersOnPage() throws InterruptedException {
+    if (adNumbersOnPage != null && !adNumbersDirty) {
+      return;
+    }
+    gotoMyAds();
+    adNumbersOnPage = new HashMap<String, AdOnPage>();
+    String adNumber;
+    String adTitle;
+    int i = 0;
+    driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+    do {
+      adNumber = null;
+      adTitle = null;
+      i = i + 3;
+      String locator = "// div[@id='bodyCol1']/table/tbody/tr[" + i
+          + "]/td[2]/span";
+      String descriptionLocator = "//*[@id='bodyCol1']/table[1]/tbody/tr[" + i
+          + "]/td[4]/a";
+      try {
+        if (selenium.isElementPresent(locator)) {
+          adNumber = selenium.getText(locator);
+          adTitle = selenium.getText(descriptionLocator);
+          AdOnPage adOnPage = new AdOnPage();
+          adOnPage.setAdNumber(adNumber);
+          adOnPage.setAdTitle(adTitle);
+          adOnPage.setAdNumberRow(i);
+          adNumbersOnPage.put(adNumber, adOnPage);
+        }
+      } catch (Exception e) {
+        // expected trying again after the last existing ad is found...
+      }
+    } while (adNumber != null);
+    adNumbersDirty = false;
+    driver.manage().timeouts()
+        .implicitlyWait(Integer.parseInt(pageTimeOutMS), TimeUnit.SECONDS);
+  }
+
+  void gotoMyAds() throws InterruptedException {
+    maybeLogin();
+    if (!selenium.isTextPresent("My Classified Ads")) {
+      selenium.open("https://www.ksl.com/?nid=280");
+      waitFor("My Classified Ads");
+    }
+  }
+
+  public void cleanUp() throws InterruptedException {
+    removeOrphanedAds();
+    clearAdNumbersOnInactiveAds();
+  }
+
+  void removeOrphanedAds() throws InterruptedException {
+    campaigns = ServicesClient.fetchCampaigns();
+    loadAdNumbersOnPage();
+    HashMap<String, AdOnPage> adNumbersOnPageTemp = new HashMap<String, AdOnPage>(
+        adNumbersOnPage);
+    for (String adNumber : adNumbersOnPageTemp.keySet()) {
+      if (getAllStoredAdNumbers().get(adNumber) == null) {
+        deleteAd(adNumber);
+      }
+    }
+  }
+
+  void deleteAnyAll() throws InterruptedException {
+    campaigns = ServicesClient.fetchCampaigns();
+    loadAdNumbersOnPage();
+    HashMap<String, AdOnPage> adNumbersOnPageTemp = new HashMap<String, AdOnPage>(
+        adNumbersOnPage);
+    for (String adNumber : adNumbersOnPageTemp.keySet()) {
+      deleteAd(adNumber);
+    }
+  }
+
+  public void clearAdNumbersOnInactiveAds() throws InterruptedException {
+    gotoMyAds();
+    loadAdNumbersOnPage();
+    campaigns = ServicesClient.fetchCampaigns();
+    for (Campaign campaign : campaigns) {
+      if (!StringUtils.isEmpty(campaign.getPubliserAdNumber())) {
+        if (campaign.getActive()) {
+          if (!adNumbersOnPage.containsKey(campaign.getPubliserAdNumber())) {
+            campaign.setPubliserAdNumber(null);
+            ServicesClient.updatePublisherAdNumber(campaign);
+          }
+        } else {
+          campaign.setPubliserAdNumber(null);
+          ServicesClient.updatePublisherAdNumber(campaign);
+        }
+      }
+    }
+  }
+
+  public void deleteAd(String adNumber) throws InterruptedException {
+    gotoMyAds();
+    if (!adNumbersOnPage.containsKey(adNumber)) {
+      return; // ad must have already been deleted
+    }
+    int adNumberRow = adNumbersOnPage.get(adNumber).getAdNumberRow();
+    int deleteButtonRow = adNumberRow + 1;
+    String deleteButtonXpath = "//*[@id='bodyCol1']/table[1]/tbody/tr["
+        + deleteButtonRow + "]/td/div/a[1]/div";
+    System.out.println(selenium.getText(deleteButtonXpath));
+    waitFor(deleteButtonXpath);
+    while (selenium.isTextPresent(adNumber)) {
+      doDeleteAd(deleteButtonXpath);
+    }
+    if (adNumbersOnPage.get(adNumber) != null) {
+      adNumbersOnPage.remove(adNumber);
+    }
+    selenium.close();
+  }
+
+  void doDeleteAd(String deleteButton) throws InterruptedException {
+    selenium.click(deleteButton);
+    selenium.waitForPageToLoad(pageTimeOutMS);
+    waitFor("Delete");
+    Thread.sleep(1000);
+    String locator = "//*[@id='deleteConfirmation']";
+    waitFor(locator);
+    selenium.click(locator);
+    String s = "//*[@id='bodyCol1']/p/a";
+    waitFor(s);
+    selenium.click(s);
+    Thread.sleep(5000);
+    selenium.refresh();
+    Thread.sleep(5000);
+  }
+
+  public void basicInfoPage() throws Exception {
+    String subCatId = "112";
+    if (campaign.getSubCategory().equals("Animal Shelters and Rescues")) {
+      subCatId = "274";
+    }
+    selenium.open("http://www.ksl.com/index.php?nid=640&form_3=104&form_4="
+        + subCatId);
+    waitFor("Asking Price:");
+    selenium.type("6", campaign.getPrice());
+    selenium.type("8", campaign.getAdTitle());
+    selenium.select("136", "label=For Sale");
+    selenium.select("135", "label=Private Listing");
+    selenium.type("9", campaign.getDescription());
+    selenium.click("next");
+  }
+
+  public void contactPage() throws Exception {
+    waitFor("Contact me by Email");
+    selenium.type("11", campaign.getContactName());
+    selenium.type("12", campaign.getEmailAddress());
+    selenium.type("13", campaign.getEmailAddress());
+    selenium.type("73_a", campaign.getPhoneAreaCode());
+    selenium.type("73_b", campaign.getPhonePrefix());
+    selenium.type("73_c", campaign.getPhoneSuffix());
+    selenium.type("34", campaign.getStreet1());
+    selenium.type("36", campaign.getCity());
+    selenium.select("37", "label=" + campaign.getState());
+    selenium.type("38", campaign.getZipCode());
+    selenium.click("next");
+  }
+
+  public void addPhotos() throws Exception {
+    waitFor("Photo Upload");
+    downloadImages();
+    selenium.type("142", "C:\\_ae_images\\1.jpg");
+    selenium.click("s-142");
+    int i = 1;
+    for (String path : campaign.getImagePaths()) {
+      selenium.type("142", "C:\\_ae_images\\" + ++i + ".jpg");
+      selenium.click("s-142");
+    }
+    selenium.waitForPageToLoad(pageTimeOutMS);
+  }
+
+  private void finishPosting() throws InterruptedException, IOException {
+    waitFor("next");
+    selenium.click("next");
+    waitFor("YOU AGREE WITH THE POSTING RULES");
+    selenium.click("next");
+    Thread.sleep(1000);
+    waitFor("20 minutes");
+    if (selenium.isTextPresent("Fatal error:")) {
+      fail("Fatal Error: on Ksl.com. Debug to this point to view error on Ksl.com");
+    }
+    waitFor("Your classified ad has successfully been submitted to ksl.com ");
+    adNumbersDirty = true;
+    Date time = new Date();
+    postTimes.writeLastPostTimeToDisk(time);
+    postTimes.writeLastPostTimeToDisk(campaign, time);
+    ServicesClient.updateLastPostTime(campaign);
+  }
+
+  void downloadImages() {
+    imageNumber = 0;
+    downloadImage(setSize(campaign.getPrimaryImagePath()));
+    for (String path : campaign.imagePaths) {
+      downloadImage(setSize(path));
+    }
+  }
+
+  String setSize(String path) {
+    String s = path;
+    if (StringUtils.contains(path, "=")) {
+      s = StringUtils.left(path, path.indexOf("="));
+      s += "=s640";
+    }
+    return s;
+  }
+
+  void downloadImage(String path) {
+    try {
+      BufferedImage image = ImageIO.read(new URL(path));
+      String dirString = "c:\\_ae_images\\";
+      File dir = new File(dirString);
+      dir.delete();
+      dir.mkdir();
+      File file = new File(dirString + ++imageNumber + ".jpg");
+      ImageIO.write(image, "jpg", file);
+    } catch (MalformedURLException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  void waitFor(String text) throws InterruptedException {
+    for (int second = 0;; second++) {
+      if (second >= 20) {
+        fail("timeout");
+      }
+      System.out.println("waitFor:" + text + " " + second);
+      try {
+        if (selenium.getLocation().contains(text)) {
+          break;
+        }
+        if (selenium.isTextPresent(text)) {
+          break;
+        }
+        if (selenium.isElementPresent(text)) {
+          break;
+        }
+      } catch (Exception e) {
+      }
+      Thread.sleep(1000);
+    }
+  }
+}

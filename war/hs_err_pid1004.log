@@ -1,0 +1,238 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x000000006dbb1331, pid=1004, tid=5852
+#
+# JRE version: 6.0_23-b05
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (19.0-b09 mixed mode windows-amd64 compressed oops)
+# Problematic frame:
+# V  [jvm.dll+0x321331]
+#
+# If you would like to submit a bug report, please visit:
+#   http://java.sun.com/webapps/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x000000000954a000):  JavaThread "Code server for AEHOME from Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.68 Safari/534.30 on http://127.0.0.1:8888/AEHOME/hosted.html?AEHOME @ K!n-8r~#P((Rs,(t" daemon [_thread_in_vm, id=5852, stack(0x000000000fd70000,0x000000000fe70000)]
+
+siginfo: ExceptionCode=0xc0000005, reading address 0x0000000000000000
+
+Registers:
+RAX=0x00000000dffff3a0, RBX=0x0000000000000000, RCX=0x000000006de0a7e0, RDX=0x00000000d808b5f8
+RSP=0x000000000fe6ca90, RBP=0x0000000000000000, RSI=0x000000000a68f020, RDI=0x000000000a68f068
+R8=0x00000000000000cb, R9=0x00000000d808b5f8, R10=0x0000000003656490, R11=0x0000000000000001
+R12=0x00000000000000a2, R13=0x000000000fe6d140, R14=0x000000000cbb2c90, R15=0x000000000954a000
+RIP=0x000000006dbb1331, EFLAGS=0x0000000000010246
+
+Register to memory mapping:
+
+RAX=0x00000000dffff3a0
+
+[error occurred during error reporting (printing registers, top of stack, instructions near pc), id 0xe0000000]
+
+Stack: [0x000000000fd70000,0x000000000fe70000],  sp=0x000000000fe6ca90,  free space=1010k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x321331]
+
+[error occurred during error reporting (printing native stack), id 0xc0000005]
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+j  sun.instrument.InstrumentationImpl.redefineClasses0(J[Ljava/lang/instrument/ClassDefinition;)V+0
+j  sun.instrument.InstrumentationImpl.redefineClasses([Ljava/lang/instrument/ClassDefinition;)V+73
+j  com.zeroturnaround.javarebel.java5.c.a(Ljava/lang/instrument/ClassDefinition;)V+31
+j  com.zeroturnaround.javarebel.java5.c.a(Ljava/lang/Class;[B)V+76
+j  com.zeroturnaround.javarebel.ClassRedefiner.c(Ljava/lang/Class;[B)V+21
+j  com.zeroturnaround.javarebel.ge.redefineProxy(Ljava/lang/Class;Z)V+17
+j  com.zeroturnaround.javarebel.ge.redefineProxy(Ljava/lang/Class;)V+6
+j  com.zeroturnaround.javarebel.ge.initClass()V+20
+j  org.ae.client.frame.RPCResponse.<clinit>()V+41
+v  ~StubRoutines::call_stub
+j  org.ae.client.rpc.GetLoginInfoResponse_FieldSerializer.instantiate(Lcom/google/gwt/user/client/rpc/SerializationStreamReader;)Lorg/ae/client/rpc/GetLoginInfoResponse;+0
+j  org.ae.client.rpc.GetLoginInfoResponse_FieldSerializer.create(Lcom/google/gwt/user/client/rpc/SerializationStreamReader;)Ljava/lang/Object;+1
+j  com.google.gwt.user.client.rpc.impl.SerializerBase.instantiate(Lcom/google/gwt/user/client/rpc/SerializationStreamReader;Ljava/lang/String;)Ljava/lang/Object;+30
+j  com.google.gwt.user.client.rpc.impl.ClientSerializationStreamReader.deserialize(Ljava/lang/String;)Ljava/lang/Object;+11
+j  com.google.gwt.user.client.rpc.impl.AbstractSerializationStreamReader.readObject()Ljava/lang/Object;+35
+j  com.google.gwt.user.client.rpc.impl.RequestCallbackAdapter$ResponseReader$8.read(Lcom/google/gwt/user/client/rpc/SerializationStreamReader;)Ljava/lang/Object;+1
+j  com.google.gwt.user.client.rpc.impl.RequestCallbackAdapter.onResponseReceived(Lcom/google/gwt/http/client/Request;Lcom/google/gwt/http/client/Response;)V+128
+j  com.google.gwt.http.client.Request.fireOnResponseReceived(Lcom/google/gwt/http/client/RequestCallback;)V+64
+j  com.google.gwt.http.client.RequestBuilder$1.onReadyStateChange(Lcom/google/gwt/xhr/client/XMLHttpRequest;)V+20
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  com.google.gwt.dev.shell.MethodDispatch.invoke(Lcom/google/gwt/dev/shell/JsValue;[Lcom/google/gwt/dev/shell/JsValue;Lcom/google/gwt/dev/shell/JsValue;)Z
+J  com.google.gwt.dev.shell.OophmSessionHandler.invoke(Lcom/google/gwt/dev/shell/BrowserChannelServer;Lcom/google/gwt/dev/shell/BrowserChannel$Value;I[Lcom/google/gwt/dev/shell/BrowserChannel$Value;)Lcom/google/gwt/dev/shell/BrowserChannel$SessionHandler$ExceptionOrReturnValue;
+J  com.google.gwt.dev.shell.ModuleSpaceOOPHM.doInvoke(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Lcom/google/gwt/dev/shell/JsValue;
+J  com.google.gwt.dev.shell.ModuleSpace.invokeNativeObject(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;
+j  com.google.gwt.dev.shell.JavaScriptHost.invokeNativeObject(Ljava/lang/String;Ljava/lang/Object;[Ljava/lang/Class;[Ljava/lang/Object;)Ljava/lang/Object;+7
+j  com.google.gwt.core.client.impl.Impl.apply(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;+38
+j  com.google.gwt.core.client.impl.Impl.entry0(Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;+13
+v  ~StubRoutines::call_stub
+j  sun.reflect.NativeMethodAccessorImpl.invoke0(Ljava/lang/reflect/Method;Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+0
+j  sun.reflect.NativeMethodAccessorImpl.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;+87
+J  java.lang.reflect.Method.invoke(Ljava/lang/Object;[Ljava/lang/Object;)Ljava/lang/Object;
+J  com.google.gwt.dev.shell.MethodDispatch.invoke(Lcom/google/gwt/dev/shell/JsValue;[Lcom/google/gwt/dev/shell/JsValue;Lcom/google/gwt/dev/shell/JsValue;)Z
+J  com.google.gwt.dev.shell.OophmSessionHandler.invoke(Lcom/google/gwt/dev/shell/BrowserChannelServer;Lcom/google/gwt/dev/shell/BrowserChannel$Value;I[Lcom/google/gwt/dev/shell/BrowserChannel$Value;)Lcom/google/gwt/dev/shell/BrowserChannel$SessionHandler$ExceptionOrReturnValue;
+j  com.google.gwt.dev.shell.BrowserChannelServer.reactToMessages(Lcom/google/gwt/dev/shell/BrowserChannelServer$SessionHandlerServer;)V+92
+j  com.google.gwt.dev.shell.BrowserChannelServer.processConnection()V+873
+j  com.google.gwt.dev.shell.BrowserChannelServer.run()V+1
+j  java.lang.Thread.run()V+11
+v  ~StubRoutines::call_stub
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+=>0x000000000954a000 JavaThread "Code server for AEHOME from Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/534.30 (KHTML, like Gecko) Chrome/12.0.742.68 Safari/534.30 on http://127.0.0.1:8888/AEHOME/hosted.html?AEHOME @ K!n-8r~#P((Rs,(t" daemon [_thread_in_vm, id=5852, stack(0x000000000fd70000,0x000000000fe70000)]
+  0x0000000009549800 JavaThread "1083649684@qtp-538179130-19" [_thread_blocked, id=7084, stack(0x000000000fb70000,0x000000000fc70000)]
+  0x0000000007967000 JavaThread "1059921506@qtp-538179130-18" [_thread_blocked, id=6416, stack(0x000000000e970000,0x000000000ea70000)]
+  0x0000000007962800 JavaThread "pool-1-thread-6" daemon [_thread_blocked, id=5492, stack(0x0000000001e80000,0x0000000001f80000)]
+  0x000000000954b800 JavaThread "1587891390@qtp-538179130-16" [_thread_blocked, id=6228, stack(0x000000000e870000,0x000000000e970000)]
+  0x0000000007963800 JavaThread "1113366018@qtp-538179130-13" [_thread_blocked, id=6432, stack(0x0000000007d90000,0x0000000007e90000)]
+  0x000000000954a800 JavaThread "61507659@qtp-538179130-10" [_thread_blocked, id=6964, stack(0x000000000fa70000,0x000000000fb70000)]
+  0x0000000007969000 JavaThread "1507720758@qtp-538179130-8" [_thread_blocked, id=5244, stack(0x000000000b130000,0x000000000b230000)]
+  0x0000000009548000 JavaThread "AWT-Windows" daemon [_thread_in_native, id=5360, stack(0x000000000fea0000,0x000000000ffa0000)]
+  0x0000000009546800 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=4796, stack(0x000000000b500000,0x000000000b600000)]
+  0x0000000007968800 JavaThread "pool-2-thread-2" [_thread_blocked, id=2448, stack(0x000000000b400000,0x000000000b500000)]
+  0x0000000007966800 JavaThread "pool-2-thread-1" [_thread_blocked, id=5268, stack(0x000000000b300000,0x000000000b400000)]
+  0x0000000007968000 JavaThread "com.google.appengine.repackaged.com.google.common.base.internal.Finalizer" daemon [_thread_blocked, id=5420, stack(0x00000000020d0000,0x00000000021d0000)]
+  0x0000000007965800 JavaThread "Timer-1" daemon [_thread_blocked, id=3352, stack(0x000000000b7c0000,0x000000000b8c0000)]
+  0x0000000007965000 JavaThread "Timer-0" daemon [_thread_blocked, id=880, stack(0x0000000009e60000,0x0000000009f60000)]
+  0x0000000007964000 JavaThread "693604324@qtp-538179130-1 - Acceptor0 SelectChannelConnector@0.0.0.0:8888" [_thread_in_native, id=4380, stack(0x0000000009d60000,0x0000000009e60000)]
+  0x0000000007962000 JavaThread "com.google.gwt.thirdparty.guava.common.base.internal.Finalizer" daemon [_thread_blocked, id=3948, stack(0x000000000b030000,0x000000000b130000)]
+  0x00000000086ac000 JavaThread "Code server listener" daemon [_thread_in_native, id=4268, stack(0x0000000009f60000,0x000000000a060000)]
+  0x0000000008e06000 JavaThread "Thread-6" daemon [_thread_blocked, id=6984, stack(0x0000000009c60000,0x0000000009d60000)]
+  0x00000000095b3000 JavaThread "Thread-5" [_thread_in_native, id=7152, stack(0x0000000009b60000,0x0000000009c60000)]
+  0x00000000079b5800 JavaThread "Low Memory Detector" daemon [_thread_blocked, id=2628, stack(0x0000000008190000,0x0000000008290000)]
+  0x00000000079a0000 JavaThread "CompilerThread1" daemon [_thread_blocked, id=5484, stack(0x0000000008090000,0x0000000008190000)]
+  0x0000000007a1f000 JavaThread "CompilerThread0" daemon [_thread_blocked, id=6840, stack(0x0000000007f90000,0x0000000008090000)]
+  0x0000000007a19800 JavaThread "Thread-4" daemon [_thread_blocked, id=6664, stack(0x0000000007e90000,0x0000000007f90000)]
+  0x0000000007a16000 JavaThread "Thread-2" daemon [_thread_blocked, id=5564, stack(0x0000000007c90000,0x0000000007d90000)]
+  0x00000000077f3000 JavaThread "Thread-1" daemon [_thread_blocked, id=1112, stack(0x0000000007b90000,0x0000000007c90000)]
+  0x00000000068a3800 JavaThread "JDWP Command Reader" daemon [_thread_in_native, id=6496, stack(0x0000000007690000,0x0000000007790000)]
+  0x000000000689c800 JavaThread "JDWP Event Helper Thread" daemon [_thread_blocked, id=5164, stack(0x0000000007420000,0x0000000007520000)]
+  0x0000000006893000 JavaThread "JDWP Transport Listener: dt_socket" daemon [_thread_blocked, id=1184, stack(0x0000000007190000,0x0000000007290000)]
+  0x0000000006889800 JavaThread "Attach Listener" daemon [_thread_blocked, id=2184, stack(0x0000000006b30000,0x0000000006c30000)]
+  0x0000000006884800 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=5844, stack(0x0000000006a30000,0x0000000006b30000)]
+  0x00000000002c7800 JavaThread "Finalizer" daemon [_thread_blocked, id=2656, stack(0x0000000006730000,0x0000000006830000)]
+  0x00000000002c6000 JavaThread "Reference Handler" daemon [_thread_blocked, id=6208, stack(0x0000000006630000,0x0000000006730000)]
+  0x000000000061c800 JavaThread "main" [_thread_blocked, id=6780, stack(0x00000000027a0000,0x00000000028a0000)]
+
+Other Threads:
+  0x00000000002c1800 VMThread [stack: 0x0000000006530000,0x0000000006630000] [id=6308]
+  0x00000000079b6800 WatcherThread [stack: 0x0000000008290000,0x0000000008390000] [id=2652]
+
+VM state:not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap
+ PSYoungGen      total 82560K, used 12K [0x00000000f5560000, 0x00000000fe890000, 0x0000000100000000)
+  eden space 82496K, 0% used [0x00000000f5560000,0x00000000f5563250,0x00000000fa5f0000)
+  from space 64K, 0% used [0x00000000fa5f0000,0x00000000fa5f0000,0x00000000fa600000)
+  to   space 34048K, 0% used [0x00000000fc750000,0x00000000fc750000,0x00000000fe890000)
+ PSOldGen        total 349568K, used 132270K [0x00000000e0000000, 0x00000000f5560000, 0x00000000f5560000)
+  object space 349568K, 37% used [0x00000000e0000000,0x00000000e812bb60,0x00000000f5560000)
+ PSPermGen       total 131072K, used 131071K [0x00000000d8000000, 0x00000000e0000000, 0x00000000e0000000)
+  object space 131072K, 99% used [0x00000000d8000000,0x00000000dfffff40,0x00000000e0000000)
+
+Dynamic libraries:
+0x0000000000400000 - 0x000000000042e000 	C:\Program Files\Java\jdk1.6.0_23\bin\javaw.exe
+0x0000000076cf0000 - 0x0000000076e99000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000076bd0000 - 0x0000000076cef000 	C:\Windows\system32\kernel32.dll
+0x000007fefd3d0000 - 0x000007fefd43b000 	C:\Windows\system32\KERNELBASE.dll
+0x000007fefd6f0000 - 0x000007fefd7cb000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fefd5b0000 - 0x000007fefd64f000 	C:\Windows\system32\msvcrt.dll
+0x000007fefee00000 - 0x000007fefee1f000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefe940000 - 0x000007fefea6d000 	C:\Windows\system32\RPCRT4.dll
+0x0000000076ad0000 - 0x0000000076bca000 	C:\Windows\system32\USER32.dll
+0x000007fefed80000 - 0x000007fefede7000 	C:\Windows\system32\GDI32.dll
+0x000007fefd520000 - 0x000007fefd52e000 	C:\Windows\system32\LPK.dll
+0x000007fefef30000 - 0x000007fefeff9000 	C:\Windows\system32\USP10.dll
+0x000007fefe730000 - 0x000007fefe75e000 	C:\Windows\system32\IMM32.DLL
+0x000007fefee20000 - 0x000007fefef29000 	C:\Windows\system32\MSCTF.dll
+0x000007fefd7d0000 - 0x000007fefd841000 	C:\Windows\system32\SHLWAPI.dll
+0x000000006d890000 - 0x000000006df80000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\server\jvm.dll
+0x000007fefac10000 - 0x000007fefac4b000 	C:\Windows\system32\WINMM.dll
+0x000000006d800000 - 0x000000006d80e000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\verify.dll
+0x000000006d450000 - 0x000000006d477000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\java.dll
+0x000000006d3b0000 - 0x000000006d3ba000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\hpi.dll
+0x0000000076eb0000 - 0x0000000076eb7000 	C:\Windows\system32\PSAPI.DLL
+0x000000006d4c0000 - 0x000000006d4f4000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\jdwp.dll
+0x000000006d6d0000 - 0x000000006d6d8000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\npt.dll
+0x000000006d400000 - 0x000000006d420000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\instrument.dll
+0x000000006d850000 - 0x000000006d862000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\zip.dll
+0x000000006d310000 - 0x000000006d319000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\dt_socket.dll
+0x000007fefd8b0000 - 0x000007fefd8fd000 	C:\Windows\system32\WS2_32.dll
+0x000007fefedf0000 - 0x000007fefedf8000 	C:\Windows\system32\NSI.dll
+0x000007fefae50000 - 0x000007fefae65000 	C:\Windows\system32\NLAapi.dll
+0x000007fef9bf0000 - 0x000007fef9c05000 	C:\Windows\system32\napinsp.dll
+0x000007fef9c10000 - 0x000007fef9c29000 	C:\Windows\system32\pnrpnsp.dll
+0x00000000742a0000 - 0x00000000742d5000 	C:\Program Files\Bonjour\mdnsNSP.dll
+0x000007fefa890000 - 0x000007fefa8b7000 	C:\Windows\system32\Iphlpapi.DLL
+0x000007fefa870000 - 0x000007fefa87b000 	C:\Windows\system32\WINNSI.DLL
+0x000007fef9c30000 - 0x000007fef9c5e000 	C:\Program Files\Common Files\Microsoft Shared\Windows Live\WLIDNSP.DLL
+0x000007fefc9c0000 - 0x000007fefca15000 	C:\Windows\System32\mswsock.dll
+0x000007fefc840000 - 0x000007fefc89b000 	C:\Windows\system32\DNSAPI.dll
+0x000007fef9bb0000 - 0x000007fef9bbb000 	C:\Windows\System32\winrnr.dll
+0x000007fefa730000 - 0x000007fefa783000 	C:\Windows\System32\fwpuclnt.dll
+0x000007fef9b60000 - 0x000007fef9b68000 	C:\Windows\system32\rasadhlp.dll
+0x000007fefc300000 - 0x000007fefc307000 	C:\Windows\System32\wshtcpip.dll
+0x000000006d6a0000 - 0x000000006d6b7000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\net.dll
+0x000007fefc9b0000 - 0x000007fefc9b7000 	C:\Windows\System32\wship6.dll
+0x000007fefa6a0000 - 0x000007fefa6b1000 	C:\Windows\system32\dhcpcsvc6.DLL
+0x000007fefa680000 - 0x000007fefa698000 	C:\Windows\system32\dhcpcsvc.DLL
+0x000000006d5e0000 - 0x000000006d5ea000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\management.dll
+0x000007fefca20000 - 0x000007fefca37000 	C:\Windows\system32\CRYPTSP.dll
+0x000007fefc720000 - 0x000007fefc767000 	C:\Windows\system32\rsaenh.dll
+0x000007fefc440000 - 0x000007fefc45e000 	C:\Windows\system32\USERENV.dll
+0x000007fefd150000 - 0x000007fefd15f000 	C:\Windows\system32\profapi.dll
+0x000007fefd080000 - 0x000007fefd08f000 	C:\Windows\system32\CRYPTBASE.dll
+0x000000006d6c0000 - 0x000000006d6cb000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\nio.dll
+0x000000006d0a0000 - 0x000000006d263000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\awt.dll
+0x000007fef9eb0000 - 0x000007fef9f21000 	C:\Windows\system32\WINSPOOL.DRV
+0x000007fefeb50000 - 0x000007fefed53000 	C:\Windows\system32\ole32.dll
+0x000007fefd9a0000 - 0x000007fefe728000 	C:\Windows\system32\SHELL32.dll
+0x000007fefbb70000 - 0x000007fefbd64000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.17514_none_fa396087175ac9ac\COMCTL32.dll
+0x000007fefb4c0000 - 0x000007fefb4d8000 	C:\Windows\system32\DWMAPI.DLL
+0x000007fefba40000 - 0x000007fefba96000 	C:\Windows\system32\uxtheme.dll
+0x000000006d340000 - 0x000000006d3a6000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\fontmanager.dll
+0x000007fee7720000 - 0x000007fee791f000 	C:\Windows\system32\d3d9.dll
+0x000007fefc230000 - 0x000007fefc23c000 	C:\Windows\system32\VERSION.dll
+0x000007fefaa80000 - 0x000007fefaa87000 	C:\Windows\system32\d3d8thk.dll
+0x000007fee6ac0000 - 0x000007fee7714000 	C:\Windows\system32\nvd3dumx.dll
+0x000007fefbaf0000 - 0x000007fefbb1c000 	C:\Windows\system32\powrprof.dll
+0x000007fefe760000 - 0x000007fefe937000 	C:\Windows\system32\SETUPAPI.dll
+0x000007fefd4e0000 - 0x000007fefd516000 	C:\Windows\system32\CFGMGR32.dll
+0x000007fefea70000 - 0x000007fefeb47000 	C:\Windows\system32\OLEAUT32.dll
+0x000007fefd240000 - 0x000007fefd25a000 	C:\Windows\system32\DEVOBJ.dll
+0x000000006d570000 - 0x000000006d5a5000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\jpeg.dll
+0x000000006d5f0000 - 0x000000006d69f000 	C:\Program Files\Java\jdk1.6.0_23\jre\bin\mlib_image.dll
+
+VM Arguments:
+jvm_args: -agentlib:jdwp=transport=dt_socket,suspend=y,address=localhost:56937 -Xmx512m -Drebel.log=true -javaagent:C:\eclipseOld\plugins\com.google.appengine.eclipse.sdkbundle_1.4.3.v201103311225\appengine-java-sdk-1.4.3\lib\agent\appengine-agent.jar -javaagent:C:\eclipseOld\plugins\org.zeroturnaround.eclipse.embedder_4.0.2.201106211442\jrebel\jrebel.jar -XX:MaxPermSize=128m -Dfile.encoding=Cp1252 
+java_command: com.google.gwt.dev.DevMode -remoteUI 55758:784490339752062 -startupUrl AEHOME.jsp -logLevel INFO -codeServerPort 9997 -port 8888 -server com.google.appengine.tools.development.gwt.AppEngineLauncher -war C:\Warranty\a4\animalengineer\AnimalEngineers\war org.ae.AEHOME
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jre6
+PATH=C:\Program Files\Java\jdk1.6.0_23\jre\bin;C:\Program Files\Common Files\Microsoft Shared\Windows Live;C:\Program Files (x86)\Common Files\Microsoft Shared\Windos Live;C:\jet7.2-eval\bin;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\IBM\Client Access\Emulator;C:\Program Files (x86)\IBM\Client Access\Shared;C:\Program Files (x86)\IBM\Client Access\;C:\Program Files (x86)\TortoiseHg\;C:\Program Files (x86)\Windows Live\Shared;C:\Program Files\Java\jre6\bin;C:\gae\;C:\Program Files (x86)\Mozilla Firefox
+USERNAME=geberhart
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 23 Stepping 10, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 Build 7601 Service Pack 1
+
+CPU:total 4 (4 cores per cpu, 1 threads per core) family 6 model 23 stepping 10, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1
+
+Memory: 4k page, physical 4123900k(877048k free), swap 8245952k(4036420k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (19.0-b09) for windows-amd64 JRE (1.6.0_23-b05), built on Nov 13 2010 02:43:42 by "java_re" with MS VC++ 8.0 (VS2005)
+
+time: Wed Jun 22 13:43:05 2011
+elapsed time: 1088 seconds
+
